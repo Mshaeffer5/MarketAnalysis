@@ -1,0 +1,4 @@
+# Cloudflare Pages SPA fallback: serve index.html for any path (200, not redirect).
+# Vite copies everything in public/ to the build root (dist/), so this lands in dist/_redirects.
+# Harmless today (the dashboard uses in-app tabs, not URL routes); future-proofs deep links.
+/*    /index.html   200
