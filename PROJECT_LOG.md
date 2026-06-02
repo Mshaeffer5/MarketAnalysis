@@ -97,8 +97,8 @@ Notable internals of `Dashboard.jsx`:
 - **Local (recommended):** double-click `Launch Dashboard.bat`. It mirrors the
   project to `%LOCALAPPDATA%\AtlasMarketDashboard` (a clean, non-OneDrive path),
   `npm install`s on first run, starts the dev server, and opens the browser. The
-  mirror is disposable and re-synced each launch — **don't edit it; edit the
-  OneDrive source.**
+  mirror is disposable and re-synced each launch — **don't edit it.** Edits flow
+  through GitHub (see Section 12); Claude refreshes the OneDrive folder from `main`.
 - **Terminal:** `npm install`, then `npm run dev` / `npm run build` / `npm run preview`.
 - **Deploy:** push to `main` → Cloudflare auto-builds (build `npm run build`, output
   `dist`). Don't hand-copy the folder to deploy; use Git (see gotchas).
@@ -176,6 +176,12 @@ Notable internals of `Dashboard.jsx`:
   `austin.json`) and write all narratives market-specific. Verified all 9 tabs SSR-render
   on the cleaned blank with zero crashes; validator clean.
 
+- **2026-06-01** — Codified the **GitHub-is-source-of-truth sync workflow** (new
+  Section 12) after finding the OneDrive folder had drifted from `main` and a
+  large-file truncation had cut the local `Dashboard.jsx` off mid-JSX (the repo copy
+  was fine). The OneDrive `atlas-dashboard/` folder is now treated as a downstream
+  mirror that Claude refreshes from `main` after every push (verified file-by-file).
+
 ## 9. Known gotchas & decisions
 
 - **OneDrive mount truncation:** large files copied through the OneDrive-synced
@@ -207,3 +213,31 @@ When you make changes and push to GitHub:
 3. Update **Section 4 (file list)** if files were added/removed.
 4. Bump the "Last updated" date.
 5. Commit this file in the same push.
+
+
+## 12. Keeping the OneDrive folder in sync with GitHub
+
+**GitHub `main` is the single source of truth.** The OneDrive `atlas-dashboard/`
+folder is a **downstream mirror**, not a git checkout — a git repo inside an
+OneDrive-synced folder corrupts, and the mount silently truncates large writes
+(this is what cut the local `Dashboard.jsx` off mid-JSX while the repo copy stayed
+intact). So the folder is kept current with `main` by an explicit, verified refresh
+— never by editing it in place or pushing from it.
+
+**The loop (every change runs through GitHub):**
+
+1. `git clone https://github.com/Mshaeffer5/MarketAnalysis.git` into a sandbox dir
+   (e.g. `/tmp/work` or `$HOME/…`) where git is reliable. (Or `git pull` an existing
+   clone.)
+2. Make **all** edits in the clone. Run `npm run build` and
+   `npm run validate-market` to verify.
+3. `git push` to `main` (Cloudflare auto-deploys). Update this log in the same push.
+4. **Refresh the OneDrive mirror from the pushed `main`:** copy every tracked file
+   with `cat "$CLONE/$f" > "$LOCAL/$f"` and confirm the md5 matches — this is the
+   only write method that survives the OneDrive mount (plain `cp`/`tar` overwrite and
+   editor writes intermittently truncate). Then verify every `git ls-files` entry is
+   byte-identical between clone and OneDrive.
+
+**Never** hand-edit files in the OneDrive folder, and **never** push its contents to
+GitHub (it may be stale). If you must check drift, compare md5 of each tracked file
+against a fresh clone of `main`.
