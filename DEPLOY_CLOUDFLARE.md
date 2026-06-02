@@ -1,5 +1,13 @@
 # Deploy to Cloudflare Pages + lock it down with Cloudflare Access (free)
 
+> **Heads-up (2026-06):** this guide is written for Cloudflare **Pages**, but the
+> live dashboard is actually deployed on Cloudflare **Workers** (project
+> `marketanalysis`, see `PROJECT_LOG.md` §2). The Git-push-auto-deploy flow and the
+> Access steps in Section B are the same; the only differences are: (1) there is
+> **no** `public/_redirects` file (Workers rejects the SPA catch-all and the app
+> has no client-side routes), and (2) Access is enabled from the Worker's
+> **Settings → Domains & Routes** rather than the Pages project.
+
 This is the recommended hosting + protection path: free, no custom domain, real
 per-person login. Cloudflare Pages auto-builds from GitHub on every push (same
 model as Vercel), and Cloudflare Access gates the `*.pages.dev` URL.
@@ -20,8 +28,9 @@ From now on: every push to the production branch (e.g. `main`) auto-builds and
 deploys. Other branches/PRs get their own preview URLs.
 
 > The `vercel.json` in this repo is ignored by Cloudflare — that's expected.
-> `public/_redirects` is the Cloudflare equivalent (SPA fallback) and is picked
-> up automatically.
+> On **Pages** you could add a `public/_redirects` SPA fallback, but this repo
+> intentionally omits it: on **Workers** (what we actually run) the `/* →`
+> catch-all is rejected as a loop, and the app has no client-side routes.
 
 ## B. One-time: turn on login protection (Cloudflare Access, free <= 50 users)
 

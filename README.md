@@ -86,7 +86,10 @@ output=`dist`). Either:
 Git-push-auto-deploy flow (build `npm run build`, output `dist`), and you can
 gate it with free Cloudflare Access on the `*.pages.dev` URL — no custom domain.
 Step-by-step in **[DEPLOY_CLOUDFLARE.md](./DEPLOY_CLOUDFLARE.md)**.
-(`public/_redirects` is the Cloudflare SPA fallback; Vercel ignores it.)
+(Note: production currently runs on Cloudflare **Workers**, not Pages — see
+`PROJECT_LOG.md` §2 and `DEPLOY_CLOUDFLARE.md`. There is intentionally **no**
+`public/_redirects` file: Workers rejects the SPA catch-all and the app has no
+client-side routes, so it isn't needed.)
 
 ## ⚠️ Not protected yet
 
