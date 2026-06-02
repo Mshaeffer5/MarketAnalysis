@@ -1,12 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Plus, X, MapPin, Lock, ChevronDown } from 'lucide-react';
+import { MapPin, Lock, ChevronDown } from 'lucide-react';
 import Dashboard, { hydrate } from './Dashboard.jsx';
 import {
   getAllMarkets,
   getActiveMarketId,
   setActiveMarketId,
-  addUserMarket,
-  removeUserMarket,
   loadMarketData,
 } from './markets/index.js';
 
@@ -63,26 +61,6 @@ export default function AppShell() {
         setLoadError(err?.message || String(err));
       });
     return () => { cancelled = true; };
-  }, [activeId]);
-
-  const handleAdd = useCallback(() => {
-    const name = window.prompt(
-      'Name the new market (e.g. "Dallas, TX").\n\nIt starts as a blank dashboard with the same layout but no data. ' +
-      'To populate it, add a JSON data file later (see src/markets/index.js).'
-    );
-    if (!name || !name.trim()) return;
-    const entry = addUserMarket(name.trim());
-    setMarkets(getAllMarkets());
-    setActiveId(entry.id);
-  }, []);
-
-  const handleRemove = useCallback((e, id) => {
-    e.stopPropagation();
-    if (!window.confirm('Remove this market from the switcher? (Built-in data files are not deleted.)')) return;
-    removeUserMarket(id);
-    const next = getAllMarkets();
-    setMarkets(next);
-    if (activeId === id) setActiveId(next[0]?.id);
   }, [activeId]);
 
   const dismissAuth = useCallback(() => {
@@ -143,39 +121,11 @@ export default function AppShell() {
                 {!m.builtin && (
                   <span style={{ fontSize: 10, opacity: 0.7, fontWeight: 600 }}>· blank</span>
                 )}
-                {!m.builtin && (
-                  <span
-                    role="button"
-                    aria-label="Remove market"
-                    onClick={(e) => handleRemove(e, m.id)}
-                    style={{ display: 'inline-flex', marginLeft: 2, opacity: 0.7 }}
-                  >
-                    <X size={13} />
-                  </span>
-                )}
+
               </button>
             );
           })}
 
-          <button
-            onClick={handleAdd}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 5,
-              border: '1px dashed rgba(255,255,255,0.35)',
-              background: 'transparent',
-              color: C.accent,
-              cursor: 'pointer',
-              padding: '5px 12px',
-              borderRadius: 4,
-              fontSize: 13,
-              fontWeight: 600,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            <Plus size={14} /> Add market
-          </button>
         </div>
       </div>
 

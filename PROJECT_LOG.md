@@ -160,7 +160,8 @@ Notable internals of `Dashboard.jsx`:
 - **2026-05-29** — Enabled Cloudflare Access on the workers.dev URL; policy correct
   but OTP email not delivering; Entra SSO deferred (Section 7).
 - **2026-05-29** — Added this `PROJECT_LOG.md`.
-- **2026-06-01** — Fixed root cause: `loaderForPath()` in `src/markets/index.js` was returning the dynamic import function instead of calling it (`return fn` → `return fn()`). This caused `hydrate()` to receive the loader function rather than JSON data, making every field undefined. Also added null guard in `reconcileSubTs()` for resilience. in `reconcileSubTs()` (`Dashboard.jsx` line 28): `if (!SUB_TS || !SUB_TS.q) return;`. Fixes crash on live site — "Failed to load market data: Cannot read properties of undefined (reading 'q')". Root cause: `SUB_TS` can be undefined if the market JSON loads but is structurally unexpected in the Cloudflare Workers build environment.
+- **2026-06-01** — Fixed root cause: `loaderForPath()` in `src/markets/index.js` was returning the dynamic import function instead of calling it (`return fn` → `return fn()`). This caused `hydrate()` to receive the loader function rather than JSON data, making every field undefined. Also added null guard in `reconcileSubTs()` for resilience.
+- **2026-06-01** — Removed "Add market" button, X (remove) buttons on tabs, and associated handlers from `AppShell.jsx`. Market switcher now shows only built-in markets; new markets added by dropping a JSON file + manifest line (no UI needed). in `reconcileSubTs()` (`Dashboard.jsx` line 28): `if (!SUB_TS || !SUB_TS.q) return;`. Fixes crash on live site — "Failed to load market data: Cannot read properties of undefined (reading 'q')". Root cause: `SUB_TS` can be undefined if the market JSON loads but is structurally unexpected in the Cloudflare Workers build environment.
 
 ## 9. Known gotchas & decisions
 
