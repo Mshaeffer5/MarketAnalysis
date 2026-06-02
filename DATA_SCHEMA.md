@@ -131,6 +131,15 @@ buyerType, buyerOrigin, sellerType, topBuyers, topSellers, bySub, hold, vintage)
 provider commentary `RP, GS, NM, AT, CS_CAP`. Vintage labels live in `DV` and
 `DATA_VINTAGE` (**there is no `DATA_SOURCES` constant**).
 
+> **Narratives must be market-specific.** Every prose/commentary field above —
+> plus the submarket-keyed objects (`SUB_NARRATIVES`, `SUB_STATS`, `SUB_TS.d`, …) —
+> describes *this* market only. Do **not** start from `austin.json` and leave
+> Austin text or Austin submarket names behind. Start from **`_blank.json`**, the
+> Austin-free scaffold (all 51 keys, correct shapes, no Austin content), and fill
+> in this market's own values. `validate-market.mjs` now emits a WARNING when a
+> non-Austin file still contains the word "Austin" or leftover Austin submarket
+> keys in its narratives.
+
 ## Cross-reference invariants (the silent killers — validator enforces)
 Every one of these must use the **same submarket names**:
 `SUBS[].s` ⟺ `SUB_TS.d` keys ⟺ `SUB_NARRATIVES` keys ⟺ `PROPS[].sb` ⟺

@@ -165,6 +165,17 @@ Notable internals of `Dashboard.jsx`:
 
 - **2026-06-01** — Added Rollup `manualChunks` vendor splitting to `vite.config.js` (`react` / `charts` / `vendor` pulled out of the app chunk). No first-load byte change, but the ~140 KB-gzip chart+react code now stays cached across app/data redeploys and the chunks download in parallel. Also corrected stale `public/_redirects` references in `README.md` and `DEPLOY_CLOUDFLARE.md` (the file was removed in `2b3d6af`; Workers rejects the SPA catch-all) and flagged Pages-vs-Workers in both. Note: the OneDrive working copy had drifted from `main` and a large-file truncation had cut `Dashboard.jsx` off mid-JSX locally (the repo copy was never affected); the local folder was re-synced from `main` after this push.
 
+- **2026-06-01** — Made `_blank.json` a truly **Austin-free scaffold**: emptied the
+  submarket-/zip-/property-keyed objects (`SUB_NARRATIVES`, `SUB_STATS`, `SUB_DESIRE`,
+  `SUB_AFFORD`, `SUB_PROPS`, `MS`, `LEASEUP_SUBS/ZIPS/MATCH`, `SUB_TS.d`, `SUB_VAC`) that
+  still carried Austin submarket names/zips (their values were already zeroed). New/blank
+  markets no longer inherit any Austin identifiers. Added a **narrative-leak guard** to
+  `validate-market.mjs`: a non-Austin file now WARNS if its narratives contain "Austin"
+  or leftover Austin submarket keys. Updated `DATA_SCHEMA.md` and
+  `MARKET_TRANSFER_PLAYBOOK.md` to say: start a new market from `_blank.json` (not
+  `austin.json`) and write all narratives market-specific. Verified all 9 tabs SSR-render
+  on the cleaned blank with zero crashes; validator clean.
+
 ## 9. Known gotchas & decisions
 
 - **OneDrive mount truncation:** large files copied through the OneDrive-synced

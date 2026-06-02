@@ -61,7 +61,12 @@ market-agnostic by default; see Section 6 on recalibration).
 1. **Confirm scope** (Section 7 decisions: counties, submarket naming, unit
    filter, urban-sub list, providers).
 2. **Ingest** the raw exports into a single JSON matching `austin.json`'s shape
-   (DATA_SCHEMA.md is the contract). Honor the unit conventions exactly.
+   (DATA_SCHEMA.md is the contract). Honor the unit conventions exactly. **Start
+   from `src/markets/data/_blank.json`** (the Austin-free scaffold — correct shape,
+   no Austin content), *not* from `austin.json`, so no Austin submarket names,
+   zips, or prose leak into the new market. Write every narrative
+   (`SUB_NARRATIVES`, `THESIS`, `EXEC_NARRATIVE`, provider commentary) fresh for
+   this market.
 3. **Validate:** `npm run validate-market -- src/markets/data/<id>.json`. Fix
    every ERROR; review WARNINGS (some are expected, e.g. a sub with no
    narrative yet).
@@ -201,6 +206,11 @@ market.
 8. **Hard-coded dates in prose.** `EXEC_NARRATIVE`/`SUB_NARRATIVES` may name a
    quarter ("Q4 2025"); update statistical claims by hand per refresh. (The
    `_market` block and chart "today" marker update automatically.)
+9. **Don't inherit Austin's narratives.** Build from `_blank.json`, not
+   `austin.json`. Every narrative and submarket-keyed object must be this market's
+   own — no Austin submarket names, zips, property names, or prose left behind.
+   The validator WARNS if a non-Austin file still contains "Austin" or leftover
+   Austin submarket keys in its narratives; treat those warnings as must-fix.
 
 ## Section 9: Quarterly refresh (once a market is live)
 

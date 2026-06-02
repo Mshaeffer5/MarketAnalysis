@@ -125,6 +125,29 @@ if (empty) {
   for (const z of arr('ZIPS')) {
     if (z && z.z != null && !(String(z.z) in ms)) W(`MS has no entry for zip ${z.z} — zip factor scores will be blank.`);
   }
+
+  // 9) Narrative-leak guard: a non-Austin market must not carry Austin prose or
+  //    Austin submarket names left over from copying austin.json / the template.
+  const isAustin = (m.id === 'austin') || path.basename(target).toLowerCase() === 'austin.json';
+  if (!isAustin) {
+    const hits = [];
+    const scanStr = (node, p) => {
+      if (typeof node === 'string') { if (/austin/i.test(node)) hits.push(p); }
+      else if (Array.isArray(node)) node.forEach((v, i) => scanStr(v, `${p}[${i}]`));
+      else if (node && typeof node === 'object') for (const [k, v] of Object.entries(node)) scanStr(v, p ? `${p}.${k}` : k);
+    };
+    for (const key of ['EXEC_NARRATIVE', 'SUB_NARRATIVES', 'THESIS', 'RP', 'GS', 'NM', 'AT', 'CS_CAP', 'RISK_FACTORS']) scanStr(d[key], key);
+    const austinSubs = new Set(Object.keys(ref.SUB_NARRATIVES || {}));
+    const keyedObjs = { SUB_NARRATIVES: d.SUB_NARRATIVES, SUB_STATS: d.SUB_STATS, 'SUB_TS.d': d.SUB_TS && d.SUB_TS.d };
+    for (const [label, obj] of Object.entries(keyedObjs)) {
+      if (obj && typeof obj === 'object') for (const kk of Object.keys(obj)) {
+        if (austinSubs.has(kk) && !subSet.has(kk)) hits.push(`${label} still has Austin submarket key "${kk}"`);
+      }
+    }
+    if (hits.length) {
+      W(`Possible Austin content left in narratives — replace with this market's own (${hits.length} hit(s)): ` + hits.slice(0, 8).join('; ') + (hits.length > 8 ? ` …+${hits.length - 8} more` : ''));
+    }
+  }
 }
 
 // Report
