@@ -25,6 +25,7 @@ let URBAN_SUBS = new Set();
 let RECON_Q = '26Q1';
 
 function reconcileSubTs() {
+  if (!SUB_TS || !SUB_TS.q) return; // guard: missing or malformed data
   const idx = SUB_TS.q.indexOf(RECON_Q);
   if (idx < 0) return;
 

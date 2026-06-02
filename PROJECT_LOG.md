@@ -10,7 +10,7 @@
 > (Section 8) with the date and what changed, and update any affected section
 > (Open Items, Auth status, file list). Keep it accurate — it's the handoff.
 
-Last updated: 2026-05-29
+Last updated: 2026-06-01
 
 ---
 
@@ -160,6 +160,7 @@ Notable internals of `Dashboard.jsx`:
 - **2026-05-29** — Enabled Cloudflare Access on the workers.dev URL; policy correct
   but OTP email not delivering; Entra SSO deferred (Section 7).
 - **2026-05-29** — Added this `PROJECT_LOG.md`.
+- **2026-06-01** — Added null guard in `reconcileSubTs()` (`Dashboard.jsx` line 28): `if (!SUB_TS || !SUB_TS.q) return;`. Fixes crash on live site — "Failed to load market data: Cannot read properties of undefined (reading 'q')". Root cause: `SUB_TS` can be undefined if the market JSON loads but is structurally unexpected in the Cloudflare Workers build environment.
 
 ## 9. Known gotchas & decisions
 
