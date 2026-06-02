@@ -15,7 +15,7 @@ const dataLoaders = import.meta.glob(['./data/*.json', '!./data/manifest.json'])
 function loaderForPath(path) {
   const fn = dataLoaders[path];
   if (!fn) throw new Error(`No data file found at ${path}`);
-  return fn;
+  return fn(); // call the dynamic import to get a Promise
 }
 
 export const BUILTIN_MARKETS = manifest.map((m) => ({
