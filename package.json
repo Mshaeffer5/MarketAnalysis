@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "validate-market": "node scripts/validate-market.mjs",
-    "check-sources": "node scripts/check-sources.mjs"
+    "check-sources": "node scripts/check-sources.mjs",
+    "build-geometry": "node scripts/build-geometry.mjs"
   },
   "dependencies": {
     "lucide-react": "^0.408.0",

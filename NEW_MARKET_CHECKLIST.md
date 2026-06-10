@@ -47,12 +47,19 @@ Legend for severity:
 - [ ] **Monthly property time series** (2022+ vintage) — feeds lease-up velocity.
       *Austin: `MonthlyTimeSeries_AustinRoundRockSanMarcosTX.xlsx`*. If missing,
       lease-up velocity falls back to the market default (dashboard still works).
-- [ ] **Submarket boundary geometry** — feeds the map (`GEO`, `COAST`,
-      `COUNTY_LINES`, `MAP_LABELS`, `MAP_VIEW`). ⚠️ **There was NO geometry file
-      in the Austin source set — the Austin map was hand-built.** For a new market
-      this must be acquired separately (CoStar KML/shapefile export, or Census
-      TIGER county-subdivision shapefiles) or hand-built. It's the longest manual
-      step; without it the map renders empty but every other tab works.
+- [ ] **Map geometry — now AUTOMATED, no file needed.** `COAST`, `COUNTY_LINES`,
+      and `MAP_VIEW` are generated from Census TIGERweb (free, no download):
+
+      ```
+      npm run build-geometry -- --counties "Mecklenburg NC, Union NC, Cabarrus NC" \
+        --labels "CHARLOTTE@35.227,-80.843; CONCORD@35.409,-80.581" --out clt-geom.json
+      ```
+
+      Pass the metro's counties (a Section-7 decision anyway) and the city labels;
+      merge the output keys into the market JSON (or use `--merge <market.json>`).
+      `GEO` (property dots) comes from the CoStar property export's lat/lng.
+      Offline fallback: `--in <dir>` with saved county GeoJSON/Esri-JSON files.
+      *(The Austin map predates this script and was hand-built.)*
 
 ## 🟣 Narrative sources (for market-specific commentary)
 

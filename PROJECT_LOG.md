@@ -10,7 +10,7 @@
 > (Section 8) with the date and what changed, and update any affected section
 > (Open Items, Auth status, file list). Keep it accurate — it's the handoff.
 
-Last updated: 2026-06-01
+Last updated: 2026-06-10
 
 ---
 
@@ -68,6 +68,7 @@ atlas-dashboard/
   vercel.json               Vercel config (ignored by Cloudflare; kept for option)
   vite.config.js
   scripts/
+    build-geometry.mjs     map geometry (COAST/COUNTY_LINES/MAP_VIEW) from Census TIGERweb
     validate-market.mjs     `npm run validate-market -- <file>` — checks a market JSON
     check-sources.mjs       `npm run check-sources -- <folder>` — flags missing source docs
   src/
@@ -181,6 +182,17 @@ Notable internals of `Dashboard.jsx`:
   large-file truncation had cut the local `Dashboard.jsx` off mid-JSX (the repo copy
   was fine). The OneDrive `atlas-dashboard/` folder is now treated as a downstream
   mirror that Claude refreshes from `main` after every push (verified file-by-file).
+
+- **2026-06-10** — **Map geometry automated.** New `scripts/build-geometry.mjs`
+  (`npm run build-geometry`): generates `COAST`/`COUNTY_LINES`/`MAP_VIEW`/`MAP_LABELS`
+  from Census TIGERweb county boundaries — `--counties "Mecklenburg NC, ..."`,
+  `--labels "CITY@lat,lng"`, `--merge <market.json>` or `--out`, `--in <dir>` offline.
+  Validated by regenerating Austin's 5 MSA counties (more accurate than the
+  hand-built map). Map geometry is no longer a manual acquisition step; docs
+  updated (checklist, playbook §4.7, schema). Also fixed DATA_SCHEMA.md: `THESIS`
+  is keyed by provider (`realpage`/`apartmentTrends`/`newmark`, arrays of `{t,v}`),
+  not per-sub. Process audit: validator confirmed catching all seeded trap classes;
+  `_blank.json` verified in sync with `austin.json` (51 keys).
 
 ## 9. Known gotchas & decisions
 

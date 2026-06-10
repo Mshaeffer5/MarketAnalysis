@@ -46,6 +46,7 @@ atlas-dashboard/
         _blank.json       Empty-but-shaped dataset (used by blank markets)
         <new>.json        Each new market drops in here
   scripts/validate-market.mjs   Schema + invariant checker
+  scripts/build-geometry.mjs    Map geometry from Census TIGERweb (COAST/COUNTY_LINES/MAP_VIEW)
   DATA_SCHEMA.md          The data contract (field-by-field)
 ```
 
@@ -125,12 +126,14 @@ source set, so the file shapes below are real, not assumed.*
    sheet; Austin workbook had several sheets).
 6. **Monthly property time series** (2022+) → lease-up velocity (optional;
    degrades gracefully — velocity falls back to the market default).
-7. **Submarket boundary geometry** → the map (`GEO`/`COAST`/`COUNTY_LINES`/
-   `MAP_LABELS`/`MAP_VIEW`). ⚠️ **There was NO geometry file in the Austin source
-   set — the Austin map was hand-built.** For a new market, acquire it separately
-   (CoStar KML/shapefile export or Census TIGER county-subdivision shapefiles) or
-   hand-build it (viewBox-pixel coords). This is the longest manual step; without
-   it the map is empty but every other tab works.
+7. **Map geometry → AUTOMATED.** `COAST`/`COUNTY_LINES`/`MAP_VIEW` are generated
+   by `npm run build-geometry -- --counties "Mecklenburg NC, Union NC, ..."
+   --labels "CHARLOTTE@35.227,-80.843; ..."` (fetches county boundaries from
+   Census TIGERweb; `--merge <market.json>` writes the keys in place; `--in <dir>`
+   for offline files). `GEO` (property dots) comes from the property export's
+   lat/lng columns. No source file to acquire; validated against the Austin map
+   (the generated lines are *more* accurate than the hand-built ones). Without
+   geometry the map renders empty but every other tab works.
 
 **Narrative sources** (provider commentary → `RP, GS, NM, AT, CS_CAP, THESIS`):
 

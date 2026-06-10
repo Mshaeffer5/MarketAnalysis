@@ -125,8 +125,15 @@ buyerType, buyerOrigin, sellerType, topBuyers, topSellers, bySub, hold, vintage)
 `ANN` (annual deliveries/absorption), `GEO`/`COAST`/`COUNTY_LINES`/`MAP_LABELS`/`MAP_VIEW`
 (map geometry in viewBox-pixel coords), `LEASEUP_PROPS`/`LEASEUP_SUBS`/`LEASEUP_ZIPS`/`LEASEUP_MATCH`/`UC_DEALS` (lease-up tab), `EMPLOYERS` (major employers panel).
 
+> **Map geometry is generated, not hand-built:** `COAST`, `COUNTY_LINES`,
+> `MAP_VIEW`, and `MAP_LABELS` come from `npm run build-geometry` (Census
+> TIGERweb county boundaries — see the script header for usage). `GEO` is one
+> `{lat,lng}` per property, parallel to `PROPS`, from the CoStar export.
+
 ### Narrative (hand-written prose)
-`EXEC_NARRATIVE`, `SUB_NARRATIVES` (one per sub), `THESIS` (per-sub thesis —
+`EXEC_NARRATIVE` (`{lead, thesis, timing}` paragraphs), `SUB_NARRATIVES` (one
+string per sub), `THESIS` (keyed by **provider** — `realpage`,
+`apartmentTrends`, `newmark` — each an array of `{t, v}` point/detail pairs;
 **note: the constant is `THESIS`, not `ANALYST_THESIS`**), `RISK_FACTORS`, and
 provider commentary `RP, GS, NM, AT, CS_CAP`. Vintage labels live in `DV` and
 `DATA_VINTAGE` (**there is no `DATA_SOURCES` constant**).
