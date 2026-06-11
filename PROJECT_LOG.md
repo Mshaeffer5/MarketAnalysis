@@ -10,7 +10,7 @@
 > (Section 8) with the date and what changed, and update any affected section
 > (Open Items, Auth status, file list). Keep it accurate — it's the handoff.
 
-Last updated: 2026-06-10
+Last updated: 2026-06-11
 
 ---
 
@@ -194,6 +194,17 @@ Notable internals of `Dashboard.jsx`:
   not per-sub. Process audit: validator confirmed catching all seeded trap classes;
   `_blank.json` verified in sync with `austin.json` (51 keys).
 
+- **2026-06-11** — Charlotte data intake complete (docs-only change). All 9 source
+  categories received into `Charlotte_Source_Data/` (OneDrive, not in repo — licensed
+  CoStar/provider data, repo is public). Crosswalk verified: 132 micro submarkets →
+  18 mapped, all matching submarket workbook. Decisions locked: 100+ unit universe,
+  provider swaps (Northmarq/Berkadia/Yardi/Colliers), URBAN_SUBS = Uptown, South End,
+  LoSo, prop tax default 0.85% (slider min must drop to ~0.4), vintage "Data as of
+  Q1 2026". Thesis drafted from data (`Atlas_Charlotte_Thesis_DRAFT.md`, OneDrive).
+  Two new Open Items added (universe filter, senior housing). Build Phases 1-7 not
+  started. Note: OneDrive `PROJECT_LOG.md` mirror was found truncated and was
+  refreshed from this commit.
+
 ## 9. Known gotchas & decisions
 
 - **OneDrive mount truncation:** large files copied through the OneDrive-synced
@@ -216,6 +227,17 @@ Notable internals of `Dashboard.jsx`:
 - [ ] (Optional) Tidy `DEPLOY_CLOUDFLARE.md` to the Workers flow; add `SETUP_LOGIN_ENTRA.md`.
 - [ ] (Optional) Tighten the Access policy value from `atlasrep.com` to `@atlasrep.com`.
 - [ ] Future markets (e.g. Charlotte): build per `MARKET_TRANSFER_PLAYBOOK.md`.
+- [ ] **Universe filter consistency (flagged 2026-06-11, Charlotte intake):**
+      Charlotte property export is 100+ units (698 props); Austin's final set is
+      150+ units. Marty approved keeping 100+ for Charlotte. **Revisit whether
+      Austin should re-pull at 100+ for consistency.**
+- [ ] **Senior housing (flagged 2026-06-11):** Charlotte export contains 40
+      Senior + 1 Corporate properties (CoStar `Market Segment`). Austin PROPS
+      includes at least 6 senior/55+ properties, fully scored — no exclusion was
+      ever applied. **Decide a policy (keep / tag / exclude) and apply to both
+      markets.** Until decided, Charlotte mirrors Austin: keep fully.
+      Both exports filter to built-2000+ (no pre-2000 assets in either universe);
+      this also explains why Chester County SC shows zero properties in CLT.
 
 ## 11. Maintenance (for any Claude session, any account)
 
