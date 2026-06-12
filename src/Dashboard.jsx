@@ -1957,7 +1957,7 @@ function ExecSummaryTab({ setTab, layerW, opMode, zipFactorW, propFactorW, subFa
           <div style={{ padding: 20 }}>
             <Metric label="Sweet Spots" value={stats.sweet} subValue="distress ≥ 5 + quality ≥ 55" size="lg" />
             <div style={{ marginTop: 12, paddingTop: 12, borderTop: `1px solid ${T.bd2}`, fontSize: 12, color: T.tx2, lineHeight: 1.5 }}>
-              Austin has limited distress (8 properties at ds ≥ 5). Sweet spots concentrate in suburban thesis zones — Pflugerville, Round Rock, Cedar Park, South Austin.
+              {`This market shows ${PROPS.filter(p => (p.ds || 0) >= 5).length} properties at ds ≥ 5. Sweet spots concentrate where distress meets the Atlas buy box — drill into the table below.`}
             </div>
           </div>
         </Card>
@@ -8469,7 +8469,7 @@ const SubmarketDeepDiveModal = ({
                         <span style={{ fontSize: 11, color: T.tx2 }}>Effective property tax</span>
                         <span style={{ fontSize: 11, fontWeight: 700, color: T.accentDk, fontVariantNumeric: 'tabular-nums' }}>{propTaxRate.toFixed(2)}%</span>
                       </div>
-                      <input type="range" min={1.0} max={3.0} step={0.05} value={propTaxRate}
+                      <input type="range" min={0.4} max={3.0} step={0.05} value={propTaxRate}
                         onChange={e => setPropTaxRate(Number(e.target.value))}
                         style={{ width: '100%', accentColor: T.accentDk, cursor: 'pointer', height: 4 }} />
                       <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 9, color: T.tx3, marginTop: 2 }}>

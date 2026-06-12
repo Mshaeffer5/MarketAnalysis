@@ -1,3 +1,10 @@
 [
-  { "id": "austin", "name": "Austin, TX" }
+  {
+    "id": "austin",
+    "name": "Austin, TX"
+  },
+  {
+    "id": "charlotte",
+    "name": "Charlotte, NC"
+  }
 ]

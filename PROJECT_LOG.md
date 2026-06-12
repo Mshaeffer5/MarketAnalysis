@@ -10,7 +10,7 @@
 > (Section 8) with the date and what changed, and update any affected section
 > (Open Items, Auth status, file list). Keep it accurate — it's the handoff.
 
-Last updated: 2026-06-11
+Last updated: 2026-06-11 (Charlotte build)
 
 ---
 
@@ -205,6 +205,16 @@ Notable internals of `Dashboard.jsx`:
   started. Note: OneDrive `PROJECT_LOG.md` mirror was found truncated and was
   refreshed from this commit.
 
+- **2026-06-11 (later)** — **Charlotte market built and registered** (`src/markets/data/charlotte.json`,
+  manifest entry "Charlotte, NC"). 698 props / 19 submarkets / 100 zips / 453 sales / 71 LU + 81 UC deals;
+  geometry generated from TIGERweb county boundaries (10 counties, fetched via sanctioned fetch; offline
+  `--in` mode). Validator: clean, 1 advisory warning (deliberate Austin comparisons in EXEC_NARRATIVE/THESIS
+  — Marty-approved framing). Provider constants per approved swaps: GS=Green Street 1Q26,
+  RP=Berkadia+Northmarq, NM=Northmarq, AT=Yardi Matrix, CS_CAP=Colliers+CoStar sales export.
+  **Shared-code changes (affect all markets):** (1) prop-tax slider min 1.0→0.4 (NC/SC effective rates
+  sit below 1%; Austin default 2.10 unaffected); (2) hardcoded Austin sentence in the Opportunistic
+  Sweet-Spots card replaced with a computed, market-agnostic line. `npm run build` green.
+
 ## 9. Known gotchas & decisions
 
 - **OneDrive mount truncation:** large files copied through the OneDrive-synced
@@ -227,6 +237,16 @@ Notable internals of `Dashboard.jsx`:
 - [ ] (Optional) Tidy `DEPLOY_CLOUDFLARE.md` to the Workers flow; add `SETUP_LOGIN_ENTRA.md`.
 - [ ] (Optional) Tighten the Access policy value from `atlasrep.com` to `@atlasrep.com`.
 - [ ] Future markets (e.g. Charlotte): build per `MARKET_TRANSFER_PLAYBOOK.md`.
+- [ ] **Charlotte zip dump re-pull (data gap):** the CLT Market Stadium pull shipped ten factor
+      columns as percentile [Score] only — [Actual Value] blank (school ratings, crime counts,
+      commute, walkability, retail, job openings, net migration, moved-in renters, median age,
+      price-to-rent). Zip scoring currently runs on 10 of 16 factors (weights redistribute);
+      affected zip-detail fields show "—". Ask the zip-data owner to re-pull with actuals, then refresh MS.
+- [ ] **Charlotte visual QA pass:** RP natRank ranks are null (no national-rank source in the CLT
+      provider set), AT histCnv concessions null (no quarterly concession series), NM creSnapshot
+      empty. Confirm panels render acceptably; tune or hide if not.
+- [ ] **Charlotte "Why Charlotte"-grade accolades:** NM.rankings built from GS/Colliers/Census ranks,
+      not a Newmark-style accolade sheet. If Marty wants the marketing-style rankings, pull them separately.
 - [ ] **Universe filter consistency (flagged 2026-06-11, Charlotte intake):**
       Charlotte property export is 100+ units (698 props); Austin's final set is
       150+ units. Marty approved keeping 100+ for Charlotte. **Revisit whether
